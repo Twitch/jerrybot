@@ -1,4 +1,4 @@
-# v 0.0.0.0.1 JerryBot Alpha
+# JerryBot Beta (RobertBot?)
 
 ## Table of Contents
 
@@ -7,6 +7,8 @@
 - [Configuring the Bot in Discord](#configuring-the-bot-in-discord)
 - [Obtaining Server/Guild and Channel IDs](#obtaining-serverguild-and-channel-ids)
 - [Running the Script Manually](#running-the-script-manually)
+- [Gettin' Dockery with it](#dockerize-it-guv)
+- [Scheduling Options](#do-it-again-man)
 
 
 ## Prerequisites
@@ -18,24 +20,6 @@ Before you begin, ensure you have the following installed on your system:
    ```sh
    pip install discord.py
    ```
-
-## Environment Variables
-
-The script requires the following environment variables to be set:
-
-- `JERRYBOT_TOKEN`: Your bot token.
-- `GUILD_ID`: The ID of the (server) where the bot will operate.
-- `CHANNEL_NAME`: The name of the channel that the bot will tidy.
-
-### Setting Environment Variables
-
-You can set these environment variables in your shell session using the `export` command:
-
-```sh
-export JERRYBOT_TOKEN="your-bot-token"
-export GUILD_ID="your-server-id"
-export CHANNEL_NAME="your-channel-name"
-```
 
 ## Configuring the Bot in Discord
 
@@ -68,19 +52,66 @@ To get the server (guild) ID and channel ID:
 
 To run the script manually, follow these steps:
 
+### Environment Variables
+
+The script requires the following environment variables to be set:
+
+    - `JERRYBOT_TOKEN`: Your bot token.
+    - `GUILD_ID`: The ID of the (server) where the bot will operate.
+    - `CHANNEL_NAME`: The name of the channel that the bot will tidy.
+
 1. Clone the repository:
 
-    ```sh
+    ```bash
     git clone https://github.com/Twitch/jerrybot
     cd jerrybot
     ```
+2. You can set these environment variables in your shell session using the `export` command:
 
-2. Ensure the environment variables are set.
-
+    ```sh
+    export JERRYBOT_TOKEN="your-bot-token"
+    export GUILD_ID="your-server-id"
+    export CHANNEL_NAME="your-channel-name"
+    ```
 3. Run the script:
 
     ```sh
     python jerrybot.py
     ```
 
+## Dockerize It Guv
+    If you want to run this in a tidy tidying container, because that's hot:
 
+    1. Clone this repo:
+        ```sh
+        git clone https://github.com/Twitch/jerrybot
+        cd jerrybot
+        ```
+    
+    2. Build that beautiful ~bean footage~ Jerry image:
+        ```sh
+        docker build -t jerry-bot .
+        ```
+    
+    3. Run that new container for its first time, friend!
+        (There are absolutely fancier and more secure ways to store and pass in your tokens. Look them up. Use an LLM. It's the future and all.)
+        ```sh
+        docker run -d --name jerry-bot \
+        -e JERRYBOT_TOKEN="your-bot-token \
+        -e SERVER_ID=your-server-id \
+        -e CHANNEL_NAME=name-of-your-channel \
+        jerry-bot
+        ```
+    
+    4. To run your personal JerryBot again next time:
+        ```sh
+        docker start jerry-bot
+        ```
+
+## Do It Again Man
+    You can schedule JerryBot to run again in a myriad of ways. Figger' it out.
+
+    - The jerrybot.py script (available on its own in the [standalone branch](https://github.com/Twitch/jerrybot/tree/standalone) or here) can be scheduled via cron
+    - Do some cool Compose stuff 
+    - Let the container run forever and let python do the scheduling magic
+    - Do some quick adjustments to run the standalone python in an AWS Lambda and be all cloud forward, mate

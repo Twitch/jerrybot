@@ -98,9 +98,9 @@ If you want to run this in a tidy tidying container, because that's hot
     (There are absolutely fancier and more secure ways to store and pass in your tokens. Look them up. Use an LLM. It's the future and all.)
     ```sh
     docker run -d --name jerry-bot \
-    -e JERRYBOT_TOKEN="your-bot-token \
+    -e JERRYBOT_TOKEN="your-bot-token" \
     -e SERVER_ID=your-server-id \
-    -e CHANNEL_NAME=name-of-your-channel \
+    -e CHANNEL_NAME="name-of-your-channel" \
     jerry-bot
     ```
 
@@ -112,7 +112,7 @@ If you want to run this in a tidy tidying container, because that's hot
 ## Do It Again Man
 You can schedule JerryBot to run again in a myriad of ways. Figger' it out.
 
-- The jerrybot.py script (available on its own in the [standalone branch](https://github.com/Twitch/jerrybot/tree/standalone) or here) can be scheduled via cron
+- The jerrybot.py script (available on its own in the [standalone branch](https://github.com/Twitch/jerrybot/tree/standalone)) can be scheduled via cron
 - Do some cool Compose stuff 
 - Let the container run forever and let python do the scheduling magic
 - Do some quick adjustments to run the standalone python in an AWS Lambda and be all cloud forward, mate

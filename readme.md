@@ -62,7 +62,7 @@ The script requires the following environment variables to be set:
 
 1. Clone the repository:
 
-    ```bash
+    ```sh
     git clone https://github.com/Twitch/jerrybot
     cd jerrybot
     ```
@@ -70,7 +70,7 @@ The script requires the following environment variables to be set:
 
     ```sh
     export JERRYBOT_TOKEN="your-bot-token"
-    export GUILD_ID="your-server-id"
+    export GUILD_ID=your-server-id
     export CHANNEL_NAME="your-channel-name"
     ```
 3. Run the script:
@@ -80,38 +80,39 @@ The script requires the following environment variables to be set:
     ```
 
 ## Dockerize It Guv
-    If you want to run this in a tidy tidying container, because that's hot:
 
-    1. Clone this repo:
-        ```sh
-        git clone https://github.com/Twitch/jerrybot
-        cd jerrybot
-        ```
-    
-    2. Build that beautiful ~bean footage~ Jerry image:
-        ```sh
-        docker build -t jerry-bot .
-        ```
-    
-    3. Run that new container for its first time, friend!
-        (There are absolutely fancier and more secure ways to store and pass in your tokens. Look them up. Use an LLM. It's the future and all.)
-        ```sh
-        docker run -d --name jerry-bot \
-        -e JERRYBOT_TOKEN="your-bot-token \
-        -e SERVER_ID=your-server-id \
-        -e CHANNEL_NAME=name-of-your-channel \
-        jerry-bot
-        ```
-    
-    4. To run your personal JerryBot again next time:
-        ```sh
-        docker start jerry-bot
-        ```
+If you want to run this in a tidy tidying container, because that's hot
+
+1. Clone this repo:
+    ```sh
+    git clone https://github.com/Twitch/jerrybot
+    cd jerrybot
+    ```
+
+2. Build that beautiful ~bean footage~ Jerry image:
+    ```sh
+    docker build -t jerry-bot .
+    ```
+
+3. Run that new container for its first time, friend!
+    (There are absolutely fancier and more secure ways to store and pass in your tokens. Look them up. Use an LLM. It's the future and all.)
+    ```sh
+    docker run -d --name jerry-bot \
+    -e JERRYBOT_TOKEN="your-bot-token \
+    -e SERVER_ID=your-server-id \
+    -e CHANNEL_NAME=name-of-your-channel \
+    jerry-bot
+    ```
+
+4. To run your personal JerryBot again next time:
+    ```sh
+    docker start jerry-bot
+    ```
 
 ## Do It Again Man
-    You can schedule JerryBot to run again in a myriad of ways. Figger' it out.
+You can schedule JerryBot to run again in a myriad of ways. Figger' it out.
 
-    - The jerrybot.py script (available on its own in the [standalone branch](https://github.com/Twitch/jerrybot/tree/standalone) or here) can be scheduled via cron
-    - Do some cool Compose stuff 
-    - Let the container run forever and let python do the scheduling magic
-    - Do some quick adjustments to run the standalone python in an AWS Lambda and be all cloud forward, mate
+- The jerrybot.py script (available on its own in the [standalone branch](https://github.com/Twitch/jerrybot/tree/standalone) or here) can be scheduled via cron
+- Do some cool Compose stuff 
+- Let the container run forever and let python do the scheduling magic
+- Do some quick adjustments to run the standalone python in an AWS Lambda and be all cloud forward, mate

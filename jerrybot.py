@@ -1,31 +1,27 @@
 #!/usr/bin/env python3
 
-import os
 import discord
 from discord.ext import commands
+import os
 
 # Bot configuration
 TOKEN = os.getenv('JERRYBOT_TOKEN')
-GUILD_ID = int(os.getenv('GUILD_ID'))
+SERVER_ID = int(os.getenv('SERVER_ID'))
 CHANNEL_NAME = os.getenv('CHANNEL_NAME')
 
 # Set up intents
 intents = discord.Intents.default()
-intents.message_content = True
 intents.guilds = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 async def find_channel_by_name(guild, channel_name):
-    for channel in guild.channels:
-        if channel.name.lower() == channel_name.lower():
-            return channel
-    return None
+    return discord.utils.get(guild.channels, name=channel_name)
 
 async def duplicate_channel():
-    guild = bot.get_guild(GUILD_ID)
+    guild = bot.get_guild(SERVER_ID)
     if not guild:
-        print(f"Error: Could not find server with ID {GUILD_ID}")
+        print(f"Error: Could not find server with ID {SERVER_ID}")
         return
 
     original_channel = await find_channel_by_name(guild, CHANNEL_NAME)
@@ -56,7 +52,7 @@ async def duplicate_channel():
         print(f"Renamed new channel to: {new_channel.name}")
 
         # Send a message in the new channel
-        # await new_channel.send("Nothing to see here. Carry on.")
+        # await new_channel.send("This channel has been cloned and is ready for use!")
         # print("Sent confirmation message in the new channel")
 
     except discord.errors.Forbidden as e:

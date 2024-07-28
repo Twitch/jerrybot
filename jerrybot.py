@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
-import discord
-from discord.ext import commands
 import os
+import sys
+import discord
+import schedule
+import time # We never have enough of it, do we?
+from discord.ext import commands
 
 # Bot configuration
 JERRYBOT_TOKEN = os.getenv('JERRYBOT_TOKEN')
@@ -66,10 +69,19 @@ async def duplicate_channel():
     except Exception as e:
         log(f"An error occurred: {e}")
 
-@bot.event
-async def on_ready():
-    log(f'{bot.user} has connected to Discord!')
-    await duplicate_channel()
-    await bot.close()
+def jerry():
+   print("Doing the needful")
+   @bot.event
+   async def on_ready():
+       log(f'{bot.user} has connected to Discord!')
+       await duplicate_channel()
+       await bot.close()
+       sys.exit(0)
 
-bot.run(JERRYBOT_TOKEN)
+   bot.run(JERRYBOT_TOKEN)
+
+schedule.every(1).minutes.do(jerry)
+
+while True:
+   schedule.run_pending()
+   time.sleep(1)

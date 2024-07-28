@@ -25,7 +25,7 @@ The script requires the following environment variables to be set:
 
 - `JERRYBOT_TOKEN`: Your bot token.
 - `GUILD_ID`: The ID of the (server) where the bot will operate.
-- `CHANNEL_NAME`: The name of the channel where the bot will post messages.
+- `CHANNEL_NAME`: The name of the channel that the bot will tidy.
 
 ### Setting Environment Variables
 
@@ -33,7 +33,7 @@ You can set these environment variables in your shell session using the `export`
 
 ```sh
 export JERRYBOT_TOKEN="your-bot-token"
-export GUILD_ID="your-guild-id"
+export GUILD_ID="your-server-id"
 export CHANNEL_NAME="your-channel-name"
 ```
 
@@ -64,13 +64,6 @@ To get the server (guild) ID and channel ID:
 1. Right-click on the server name in the server list.
 2. Click "Copy ID". This is your `GUILD_ID`.
 
-### Getting the Channel ID:
-
-1. Right-click on the channel name in the channel list.
-2. Click "Copy ID". Use this ID to identify the channel in your code.
-
-Note: For `CHANNEL_NAME`, use the actual name of the channel without the '#' symbol.
-
 ## Running the Script Manually
 
 To run the script manually, follow these steps:
@@ -78,8 +71,8 @@ To run the script manually, follow these steps:
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/yourusername/your-repo.git
-    cd your-repo
+    git clone https://github.com/Twitch/jerrybot
+    cd jerrybot
     ```
 
 2. Ensure the environment variables are set.
@@ -87,7 +80,7 @@ To run the script manually, follow these steps:
 3. Run the script:
 
     ```sh
-    python your_script.py
+    python jerrybot.py
     ```
 
 

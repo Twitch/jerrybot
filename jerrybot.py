@@ -12,6 +12,7 @@ JERRYBOT_TOKEN = os.getenv('JERRYBOT_TOKEN')
 SERVER_ID = int(os.getenv('SERVER_ID'))
 CHANNEL_NAME = os.getenv('CHANNEL_NAME')
 JERRYBOT_DEBUG = os.getenv('JERRYBOT_DEBUG', 'False').lower() == 'true'
+SCHEDULE_TIME = "02:07" # Uses 24hr format
 
 # Set up intents
 intents = discord.Intents.default()
@@ -80,8 +81,9 @@ def jerry():
 
    bot.run(JERRYBOT_TOKEN)
 
-schedule.every(1).minutes.do(jerry)
+
+schedule.every().day.at(SCHEDULE_TIME).do(jerry)
 
 while True:
    schedule.run_pending()
-   time.sleep(1)
+   time.sleep(30)

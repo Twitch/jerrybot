@@ -8,7 +8,7 @@
 - [Obtaining Server/Guild and Channel IDs](#obtaining-serverguild-and-channel-ids)
 - [Running the Script Manually](#running-the-script-manually)
 - [Gettin' Dockery with it](#dockerize-it-guv)
-- [Scheduling Options](#do-it-again-man)
+- [Scheduling Options](#do-it-again)
 
 
 ## Prerequisites
@@ -17,8 +17,9 @@ Before you begin, ensure you have the following installed on your system:
 
 - Python 3.7+ 
 - Python's discord library
+- Python's schedule library
    ```sh
-   pip install discord.py
+   pip install discord.py schedule
    ```
 
 ## Configuring the Bot in Discord
@@ -46,7 +47,7 @@ To get the server (guild) ID and channel ID:
 ### Getting the Server/Guild ID:
 
 1. Right-click on the server name in the server list.
-2. Click "Copy ID". This is your `GUILD_ID`.
+2. Click "Copy ID". This is your `SERVER_ID`.
 
 ## Running the Script Manually
 
@@ -70,7 +71,7 @@ The script requires the following environment variables to be set:
 
     ```sh
     export JERRYBOT_TOKEN="your-bot-token"
-    export GUILD_ID=your-server-id
+    export SERVER_ID=your-server-id
     export CHANNEL_NAME="your-channel-name"
     ```
 3. Run the script:
@@ -109,10 +110,30 @@ If you want to run this in a tidy tidying container, because that's hot
     docker start jerry-bot
     ```
 
-## Do It Again Man
-You can schedule JerryBot to run again in a myriad of ways. Figger' it out.
+## Do It Again
+This branch relies on Python's `schedule` libary to execute the tidy at the time specified in the `SCHEDULE_TIME` variable at the top of jerrybot.py, and Docker's restart functionality to fire the script back up once it's run once.
 
-- The jerrybot.py script (available on its own in the [standalone branch](https://github.com/Twitch/jerrybot/tree/standalone)) can be scheduled via cron
-- Do some cool Compose stuff 
-- Let the container run forever and let python do the scheduling magic
-- Do some quick adjustments to run the standalone python in an AWS Lambda and be all cloud forward, mate
+It isn't the most elegant solution, but it's our solution (for now) and it works. For now. 
+
+1. If you're mucked about with other branches of this, go do your tidying:
+    ```sh
+    docker stop jerry-bot
+    docker rm jerry-bot
+    ```
+2. Set your scheduled run time with the `SCHEDULE_TIME` variable in `jerrybot.py`, which uses a 24hr format
+
+3. Build your sweet new image:
+    ```sh
+    docker build -t jerry-bot .
+    ```
+
+4. Kick it off and make sure Docker restarts our JerryBot after it's done erasing all of your mistakes:
+    ```sh
+    docker run -d \
+    --restart unless-stopped \
+    --name jerry-bot \
+    -e JERRYBOT_TOKEN="your-bot-token" \
+    -e SERVER_ID=your-server-id \
+    -e CHANNEL_NAME="name-of-your-channel" \
+    jerry-bot
+    ```

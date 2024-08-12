@@ -6,9 +6,19 @@ import os
 
 # Bot configuration
 JERRYBOT_TOKEN = os.getenv('JERRYBOT_TOKEN')
-SERVER_ID = int(os.getenv('SERVER_ID'))
 CHANNEL_NAME = os.getenv('CHANNEL_NAME')
 JERRYBOT_DEBUG = os.getenv('JERRYBOT_DEBUG', 'False').lower() == 'true'
+SERVER_ID = os.getenv('SERVER_ID')
+
+
+# Beware some type issues sckank found on Win11. Maybe.
+if isinstance(SERVER_ID, str):
+   try:
+      SERVER_ID = int(SERVER_ID)
+   except:
+      print("Could not convert the SERVER_ID to an int. It sucks")
+      print(f"SERVER_ID is a {type(SERVER_ID)}")
+
 
 # Set up intents
 intents = discord.Intents.default()

@@ -46,7 +46,7 @@ To get the server (guild) ID and channel ID:
 ### Getting the Server/Guild ID:
 
 1. Right-click on the server name in the server list.
-2. Click "Copy ID". This is your `GUILD_ID`.
+2. Click "Copy ID". This is your `SERVER_ID`.
 
 ## Running the Script Manually
 
@@ -57,7 +57,7 @@ To run the script manually, follow these steps:
 The script requires the following environment variables to be set:
 
     - `JERRYBOT_TOKEN`: Your bot token.
-    - `GUILD_ID`: The ID of the (server) where the bot will operate.
+    - `SERVER_ID`: The ID of the (server) where the bot will operate.
     - `CHANNEL_NAME`: The name of the channel that the bot will tidy.
 
 1. Clone the repository:
@@ -70,7 +70,7 @@ The script requires the following environment variables to be set:
 
     ```sh
     export JERRYBOT_TOKEN="your-bot-token"
-    export GUILD_ID=your-server-id
+    export SERVER_ID=your-server-id
     export CHANNEL_NAME="your-channel-name"
     ```
 3. Run the script:

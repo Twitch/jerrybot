@@ -103,14 +103,13 @@ async def find_channel_by_name(guild, channel_name):
     return discord.utils.get(guild.channels, name=channel_name)
 
 async def duplicate_channel():
-    # Get the current channel name from state file, or sub in the environment variable's default value
-    current_channel = await get_curr_name()
-
     guild = bot.get_guild(JERRYBOT_SERVER_ID)
     if not guild:
         log(f"Error: Could not find server with ID {JERRYBOT_SERVER_ID}")
         return
 
+# Get the current channel name from state file, or sub in the environment variable's default value
+    current_channel = await get_curr_name()
     original_channel = await find_channel_by_name(guild, current_channel)
     if not original_channel:
         log(f"Error: Could not find channel with name {current_channel}")
@@ -120,7 +119,7 @@ async def duplicate_channel():
         # Get the new name modifier
         name_insert = get_new_name()
         if name_insert is None:
-            new_name = "venting-deleted-nightly-stay-professional"
+            new_name = JERRYBOT_DEFAULT_NAME
         else:
             new_name = "venting-" + name_insert + "-stay-professional"
 
@@ -151,11 +150,6 @@ async def duplicate_channel():
 
         # Overwrite the curr_name file with the new current channel name for the next run
         file_write(os.path.join(JERRYBOT_NAMES_PATH, "curr-name"), new_name, "w")
-
-        # Send a message in the new channel (uncomment to send messages after tidying) 
-        # message = "Nothing to see here. Carry on."
-        # await new_channel.send(message)
-        # log(f"Sent message in the new channel: {message}")
 
     except discord.errors.Forbidden as e:
         log(f"Error: Bot doesn't have the necessary permissions: {e}")

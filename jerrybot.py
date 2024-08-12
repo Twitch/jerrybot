@@ -9,7 +9,7 @@ from pathlib import Path
 
 # Bot configuration
 JERRYBOT_TOKEN = os.getenv('JERRYBOT_TOKEN')
-CHANNEL_NAME = os.getenv('CHANNEL_NAME')
+# CHANNEL_NAME = os.getenv('CHANNEL_NAME')
 SERVER_ID = os.getenv('SERVER_ID')
 JERRYBOT_DEBUG = os.getenv('JERRYBOT_DEBUG', 'False').lower() == 'true'
 NAMES_PATH = os.getenv('NAMES_PATH', './').lower() == 'true'
@@ -20,8 +20,8 @@ if isinstance(SERVER_ID, str):
    try:
       SERVER_ID = int(SERVER_ID)
    except:
-      print("Could not convert the SERVER_ID to an int. It sucks")
-      print(f"SERVER_ID is a {type(SERVER_ID)}")
+      log("Could not convert the SERVER_ID to an int. It sucks")
+      log(f"SERVER_ID is a {type(SERVER_ID)}")
 
 # Set up intents
 intents = discord.Intents.default()
@@ -34,14 +34,15 @@ Adding rudimentary channel name rotation, sloppily using files for state in case
 '''
 # Fetch the new channel name from new-names list (grab from top) and remove that line once read.
 # Return NoneType if the file is empty, the name code needs to check for this and insert the default name if NoneType is returned
-def get_new_name(file_path):
+def get_new_name():
     try:
+        file_path = os.path.join(NAMES_PATH, "new-names")
         with open(file_path, 'r+') as file:
             lines = file.readlines()
             if not lines:
                 log(f"Error: File is empty: {file_path}")
                 return None
-            top_line = lines[0].strip()
+            top_line = lines[0].strip(" \t\n-#")
             file.seek(0)
             file.writelines(lines[1:])
             file.truncate()
@@ -51,8 +52,9 @@ def get_new_name(file_path):
         return None
 
 # Check the current channel name, at least according to the state file
-def get_curr_name(file_path):
+def get_curr_name():
     try:
+        file_path = os.path.join(NAMES_PATH, "curr-name")
         with open(file_path, 'r+') as file:
             lines = file.readlines()
             if not lines:
@@ -88,17 +90,18 @@ async def duplicate_channel():
         log(f"Error: Could not find server with ID {SERVER_ID}")
         return
 
-    original_channel = await find_channel_by_name(guild, get_curr_name(os.path.join(NAMES_PATH, "curr-name")))
+    original_channel = await find_channel_by_name(guild, get_curr_name())
     if not original_channel:
         log(f"Error: Could not find channel with name {CHANNEL_NAME}")
         return
 
     try:
         # Get the new name modifier
-        name_insert = get_new_name(os.path.join(NAMES_PATH, "new-names"))
+        name_insert = get_new_name()
         if name_insert is None:
             new_name = "venting-deleted-nightly-stay-professional"
-        new_name = "venting-" + name_insert + "-stay-professional"
+        else:
+            new_name = "venting-" + name_insert + "-stay-professional"
 
 
         # Create a new channel with the same settings

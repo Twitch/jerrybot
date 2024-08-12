@@ -12,7 +12,7 @@ JERRYBOT_TOKEN = os.getenv('JERRYBOT_TOKEN')
 # CHANNEL_NAME = os.getenv('CHANNEL_NAME')
 SERVER_ID = os.getenv('SERVER_ID')
 JERRYBOT_DEBUG = os.getenv('JERRYBOT_DEBUG', 'False').lower() == 'true'
-NAMES_PATH = os.getenv('NAMES_PATH', './').lower() == 'true'
+NAMES_PATH = os.getenv('NAMES_PATH', os.getcwd())
 
 
 # Beware some type issues sckank found on Win11. Maybe.
@@ -90,9 +90,10 @@ async def duplicate_channel():
         log(f"Error: Could not find server with ID {SERVER_ID}")
         return
 
-    original_channel = await find_channel_by_name(guild, get_curr_name())
+    current_channel = get_curr_name()
+    original_channel = await find_channel_by_name(guild, current_channel)
     if not original_channel:
-        log(f"Error: Could not find channel with name {CHANNEL_NAME}")
+        log(f"Error: Could not find channel with name {current_channel}")
         return
 
     try:

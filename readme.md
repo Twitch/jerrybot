@@ -21,6 +21,20 @@ Before you begin, ensure you have the following installed on your system:
    pip install discord.py
    ```
 
+## New Channel Name Functionality
+
+The JerryBot now includes a channel name rotation feature that enhances its functionality. This feature allows the bot to dynamically change the name of the channel it manages based on a list of names specified in a file.
+
+### How It Works:
+
+1. **Name Rotation**: The bot reads from a file named `new-names`, which contains new channel name drop-ins. Each name should be on a separate line. The bot retrieves the top name from this list and removes it after use, ensuring that names are not reused until the list is replenished.
+
+2. **Default Name**: If the `new-names` file is empty or not found, the bot will fall back to a default name specified by the `JERRYBOT_DEFAULT_NAME` environment variable. This ensures that the bot always has a valid channel name to use.
+
+3. **Channel Name Format**: The bot constructs the new channel name by prefixing it with "venting-" and suffixing it with "-stay-professional". 
+
+4. **State Management**: The current channel name is tracked in a file named `curr-name`, which allows the bot to remember the last used name for future operations. Used channel names are logged in a file named `used-names` for reference.
+
 ## Configuring the Bot in Discord
 
 To set up your bot in Discord, follow these steps:
@@ -54,11 +68,16 @@ To run the script manually, follow these steps:
 
 ### Environment Variables
 
-The script requires the following environment variables to be set:
+The script requires the following environment variables:
 
-    - `JERRYBOT_TOKEN`: Your bot token.
-    - `SERVER_ID`: The ID of the (server) where the bot will operate.
-    - `CHANNEL_NAME`: The name of the channel that the bot will tidy.
+- `JERRYBOT_TOKEN`: Your Discord bot token.
+- `JERRYBOT_SERVER_ID`: The ID of the server where the bot will operate.
+- `JERRYBOT_DEFAULT_NAME`: Default channel name to use if no new names are available.
+
+JerryBot will look for, and use, the following optional settings, as well:
+
+- `JERRYBOT_NAMES_PATH`: Path to the directory containing name files (default is current working directory).
+- `JERRYBOT_DEBUG`: Set to 'true' for verbose logging (default is 'False').
 
 1. Clone the repository:
 
@@ -68,10 +87,12 @@ The script requires the following environment variables to be set:
     ```
 2. You can set these environment variables in your shell session using the `export` command:
 
-    ```sh
+    ```
     export JERRYBOT_TOKEN="your-bot-token"
-    export SERVER_ID=your-server-id
-    export CHANNEL_NAME="your-channel-name"
+    export JERRYBOT_SERVER_ID=your-server-id
+    export JERRYBOT_NAMES_PATH="/path/to/names/directory" # Optional
+    export JERRYBOT_DEBUG=true  # Optional
+    export JERRYBOT_DEFAULT_NAME="default-channel-name"
     ```
 3. Run the script:
 
@@ -99,8 +120,11 @@ If you want to run this in a tidy tidying container, because that's hot
     ```sh
     docker run -d --name jerry-bot \
     -e JERRYBOT_TOKEN="your-bot-token" \
-    -e SERVER_ID=your-server-id \
-    -e CHANNEL_NAME="name-of-your-channel" \
+    -e JERRYBOT_SERVER_ID=your-server-id \
+    -e JERRYBOT_DEFAULT_NAME="default-channel-name" \
+    -e JERRYBOT_NAMES_PATH="/path/in/container" \ # Optional
+    -e JERRYBOT_DEBUG=true \ # Optional
+    -v /path/on/host:/path/in/container \ # Optional
     jerry-bot
     ```
 

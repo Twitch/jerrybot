@@ -157,11 +157,11 @@ async def duplicate_channel():
         log(f"Deleted original channel: {original_channel.name}")
 
         # Rename the new channel to match the original
-        await new_channel.edit(name=new_name)
-        log(f"Renamed new channel to: {new_name}")
+        updated_channel = await new_channel.edit(name=new_name)
+        log(f"Renamed new channel to: {updated_channel.name}")
 
         # Overwrite the curr_name file with the new current channel name for the next run
-        file_write(os.path.join(JERRYBOT_NAMES_PATH, "curr-name"), new_name, "w")
+        file_write(os.path.join(JERRYBOT_NAMES_PATH, "curr-name"), updated_channel.name, "w")
 
     except discord.errors.Forbidden as e:
         log(f"Error: Bot doesn't have the necessary permissions: {e}")

@@ -3,6 +3,7 @@
 import discord
 from discord.ext import commands
 import os
+import re
 import datetime
 from pathlib import Path
 
@@ -50,6 +51,19 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 '''
 Adding rudimentary channel name rotation, sloppily using files for state in case the host system is hit by a struggle bus
 '''
+
+# Discord happily accepts crazy names and shortens them to single dashes for you.
+# This can lead to the current channel state file and the actual channel name being out of sync
+# Trying to fix that by trimming/fixing the name before we try to set it.
+# to-do: Go find the actual channel name that was set via the channel objects and write that to the state file
+# but this check still makes sense to leave.
+def friendly_name(content):
+    log(f"Before: {content}")
+    content = re.sub(r'\s+', '-', content)
+    content = re.sub(r'-+', '-', content)
+    log(f"hooooooeeeee: {content}")
+    return content
+
 # Fetch the new channel name from new-names list (grab from top) and remove that line once read.
 # Return NoneType if the file is empty, the name code needs to check for this and insert the default name if NoneType is returned
 def get_new_name():
@@ -64,7 +78,7 @@ def get_new_name():
             file.seek(0)
             file.writelines(lines[1:])
             file.truncate()
-        return top_line.replace(" ", "-")
+        return friendly_name(top_line)
     except FileNotFoundError:
         log(f"Error: File not found: {file_path}")
         return None

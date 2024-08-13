@@ -58,10 +58,8 @@ Adding rudimentary channel name rotation, sloppily using files for state in case
 # to-do: Go find the actual channel name that was set via the channel objects and write that to the state file
 # but this check still makes sense to leave.
 def friendly_name(content):
-    log(f"Before: {content}")
     content = re.sub(r'\s+', '-', content)
     content = re.sub(r'-+', '-', content)
-    log(f"hooooooeeeee: {content}")
     return content
 
 # Fetch the new channel name from new-names list (grab from top) and remove that line once read.

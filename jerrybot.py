@@ -53,10 +53,7 @@ Adding rudimentary channel name rotation, sloppily using files for state in case
 '''
 
 # Discord happily accepts crazy names and shortens them to single dashes for you.
-# This can lead to the current channel state file and the actual channel name being out of sync
-# Trying to fix that by trimming/fixing the name before we try to set it.
-# to-do: Go find the actual channel name that was set via the channel objects and write that to the state file
-# but this check still makes sense to leave.
+# This is now largely handled by reading the updated name of the new channel object, but tidying input is always good.
 def friendly_name(content):
     content = re.sub(r'\s+', '-', content)
     content = re.sub(r'-+', '-', content)
@@ -70,7 +67,7 @@ def get_new_name():
         with open(file_path, 'r+') as file:
             lines = file.readlines()
             if not lines:
-                log(f"Error: File is empty: {file_path}")
+                log(f"Warning: File is empty: {file_path}")
                 return None
             top_line = lines[0].strip(" \t\n-#")
             file.seek(0)
@@ -85,11 +82,10 @@ def get_new_name():
 async def get_curr_name():
     try:
         file_path = os.path.join(JERRYBOT_NAMES_PATH, "curr-name")
-        log(f"curr-file is {file_path}")
         with open(file_path, 'r+') as file:
             lines = file.readlines()
             if not lines:
-                log(f"Error: Current name state file is empty: {file_path}, using your default: {JERRYBOT_DEFAULT_NAME}")
+                log(f"Warning: Current name state file is empty: {file_path}, using your default: {JERRYBOT_DEFAULT_NAME}")
                 current_name = JERRYBOT_DEFAULT_NAME.strip()
                 return current_name
             current_name = lines[0].strip()
@@ -157,6 +153,8 @@ async def duplicate_channel():
         log(f"Deleted original channel: {original_channel.name}")
 
         # Rename the new channel to match the original
+        # Capture the name property from the updated channel object to ensure our local state
+        # actually matches the remote state for next run.
         updated_channel = await new_channel.edit(name=new_name)
         log(f"Renamed new channel to: {updated_channel.name}")
 

@@ -67,8 +67,8 @@ async def duplicate_channel():
         log(f"Renamed new channel to: {new_channel.name}")
 
         # Send a message in the new channel (uncomment to send messages after tidying) 
-        # message = "Nothing to see here. Carry on."
-        # await new_channel.send(message)
+        message = "Have a good day!"
+        await new_channel.send(message)
         # log(f"Sent message in the new channel: {message}")
 
     except discord.errors.Forbidden as e:
